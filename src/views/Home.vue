@@ -14,7 +14,7 @@
           <span class="card-title">{{peli.title}}</span>
         </div>
         <div class="card-content">
-          <p>{{peli.overview | truncate(300)}}</p>
+          <p><b>Sinopsis:</b> {{peli.overview | truncate(300)}}</p>
         </div>
       </div>
     </div>
