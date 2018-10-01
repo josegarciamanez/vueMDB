@@ -19,6 +19,10 @@
       </div>
     </div>
   </div>
+  <div class="containerPagination" v-if="this.titulo !== ''" >
+    <paginate :page-count="this.pageNumber" :page-range="5" :click-handler="functionName" :prev-text="'<'" :next-text="'>'" :container-class="'pagination'">
+    </paginate>
+  </div>
   <pre>{{$data}}</pre>
 </div>
 </template>
@@ -34,7 +38,10 @@ export default {
       url: 'https://image.tmdb.org/t/p/w500',
       titulo: '',
       pelis: [],
-      errors: []
+      errors: [],
+      pageNumber: null,
+      pageActual: null,
+      isActive: false
     }
   },
   methods: {
@@ -54,7 +61,12 @@ export default {
     if (this.titulo !== '') {
       axios.get(`https://api.themoviedb.org/3/search/movie?api_key=fcfbdbe8a826235ce7358cfa2383365b&language=es-ES&query=${this.titulo}&page=1&include_adult=false`)
         .then(response => {
+          this.pageActual = response.data.page
+          if (this.pageActual = 1) {
+            this.isActive = true
+          }
           this.pelis = response.data
+          this.pageNumber = this.pelis.total_pages
           if (this.titulo === '') {
             this.pelis = []
           }
@@ -90,5 +102,10 @@ i {
 input:focus {
   color: #673ab7;
   border-bottom: 1px solid #673ab7 !important;
+}
+
+.containerPagination {
+  margin: auto auto;
+  text-align: center;
 }
 </style>
