@@ -7,6 +7,7 @@
     </div>
   </div>
   <div class="row">
+
     <div v-for="peli in pelis.results" :key="peli.id" class="col l3" v-if="peli.poster_path">
       <div class="card">
         <div class="card-image">
@@ -19,7 +20,7 @@
       </div>
     </div>
   </div>
-  <div class="containerPagination" v-if="this.titulo !== ''" >
+  <div class="containerPagination" v-if="this.titulo !== ''">
     <paginate v-model="pageActual" :page-count="this.pageNumber" :page-range="5" :click-handler="cambioPagina" :prev-text="'<'" :next-text="'>'" :container-class="'pagination'">
     </paginate>
   </div>
@@ -28,58 +29,68 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "home",
   components: {},
   data() {
     return {
-      url: 'https://image.tmdb.org/t/p/w500',
-      titulo: '',
+      url: "https://image.tmdb.org/t/p/w500",
+      titulo: "",
       pelis: [],
       errors: [],
       pageNumber: 0,
       pageActual: 1,
       page: 1
-    }
+    };
   },
-  
+
   methods: {
     cambioPagina: function(event) {
       this.page = event;
     },
     getPelis: function() {
-      if (this.titulo !== '') {
-        axios.get(`https://api.themoviedb.org/3/search/movie?api_key=fcfbdbe8a826235ce7358cfa2383365b&language=es-ES&query=${this.titulo}&page=1&include_adult=false`)
+      if (this.titulo !== "") {
+        axios
+          .get(
+            `https://api.themoviedb.org/3/search/movie?api_key=fcfbdbe8a826235ce7358cfa2383365b&language=es-ES&query=${
+                  this.titulo
+                }&page=1&include_adult=false`
+          )
           .then(response => {
-            this.pageActual = response.data.page
-            this.pelis = response.data
-            this.pageNumber = this.pelis.total_pages
+            this.pageActual = response.data.page;
+            this.pelis = response.data;
+            this.pageNumber = this.pelis.total_pages;
           })
           .catch(e => {
-            this.errors.push(e)
-          })
+            this.errors.push(e);
+          });
       }
     }
   },
   updated() {
-    if (this.titulo !== '') {
-      axios.get(`https://api.themoviedb.org/3/search/movie?api_key=fcfbdbe8a826235ce7358cfa2383365b&language=es-ES&query=${this.titulo}&page=${this.page}&include_adult=false`)
+    if (this.titulo !== "") {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/search/movie?api_key=fcfbdbe8a826235ce7358cfa2383365b&language=es-ES&query=${
+                this.titulo
+              }&page=${this.page}&include_adult=false`
+        )
         .then(response => {
-          this.pageActual = response.data.page
-          this.pelis = response.data
-          this.pageNumber = this.pelis.total_pages
-          if (this.titulo === '') {
-            this.pelis = []
+          this.pageActual = response.data.page;
+          this.pelis = response.data;
+          this.pageNumber = this.pelis.total_pages;
+          if (this.titulo === "") {
+            this.pelis = [];
           }
         })
         .catch(e => {
-          this.errors.push(e)
-        })
+          this.errors.push(e);
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>
